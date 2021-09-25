@@ -195,3 +195,92 @@
 
 # # BFS를 수행한 결과 출력
 # print(bfs(0, 0))
+
+
+
+
+
+# 6장 정렬
+
+# 4. 두 배열의 원소 교체
+# n, k = map(int, input().split()) # N과 K를 입력 받기
+# a = list(map(int, input().split())) # 배열 A의 모든 원소를 입력받기
+# b = list(map(int, input().split())) # 배열 B의 모든 원소를 입력받기
+
+# a.sort() # 배열 A는 오름차순 정렬 수행
+# b.sort(reverse=True) # 배열 B는 내림차순 정렬 수행
+
+# # 첫 번째 인덱스부터 확인하며, 두 배열의 원소를 최대 K번 비교
+# for i in range(k):
+#     # A의 원소가 B의 원소보다 작은 경우
+#     if a[i] < b[i]:
+#         # 두 원소를 교체
+#         a[i], b[i] = b[i], a[i]
+#     else: # A의 원소가 B의 원소보다 크거나 같을 때, 반복문을 탈출
+#         break
+
+# print(sum(a)) # 배열 A의 모든 원소의 합을 출력
+
+
+
+
+
+
+
+
+
+
+# 7장 이진탐색
+# 2. 떡볶이 떡 만들기
+
+# # 떡의 개수(N)와 요청한 떡의 길이(M)을 입력
+# n, m = list(map(int, input().split(' ')))
+# # 각 떡의 개별 높이 정보를 입력
+# array = list(map(int, input().split()))
+
+# # 이진 탐색을 위한 시작점과 끝점 설정
+# start = 0
+# end = max(array)
+
+# # 이진 탐색 수행 (반복적)
+# result = 0
+# while(start <= end):
+#     total = 0
+#     mid = (start + end) // 2
+#     for x in array:
+#         # 잘랐을 때의 떡볶이 양 계산
+#         if x > mid:
+#             total += x - mid
+#     # 떡볶이 양이 부족한 경우 더 많이 자르기 (오른쪽 부분 탐색)
+#     if total < m:
+#         end = mid - 1
+#     # 떡볶이 양이 충분한 경우 덜 자르기 (왼쪽 부분 탐색)
+#     else:
+#         result = mid # 최대한 덜 잘랐을 때가 정답이므로, 여기에서 result에 기록
+#         start = mid + 1
+
+# # 정답 출력
+# print(result)
+
+# 15장 이진 탐색 문제
+# 1. 정렬된 배열에서 특정 수의 개수 구하기
+# from bisect import bisect_left, bisect_right
+
+# # 값이 [left_value, right_value]인 데이터의 개수를 반환하는 함수
+# def count_by_range(array, left_value, right_value):
+#     right_index = bisect_right(array, right_value)
+#     left_index = bisect_left(array, left_value)
+#     return right_index - left_index
+
+# n, x = map(int, input().split()) # 데이터의 개수 N, 찾고자 하는 값 x 입력 받기
+# array = list(map(int, input().split())) # 전체 데이터 입력 받기
+
+# # 값이 [x, x] 범위에 있는 데이터의 개수 계산
+# count = count_by_range(array, x, x)
+
+# # 값이 x인 원소가 존재하지 않는다면
+# if count == 0:
+#     print(-1)
+# # 값이 x인 원소가 존재한다면
+# else:
+#     print(count)
