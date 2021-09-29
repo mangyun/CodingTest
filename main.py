@@ -284,3 +284,597 @@
 # # 값이 x인 원소가 존재한다면
 # else:
 #     print(count)
+
+
+
+
+
+
+
+
+
+
+
+# 8장 다이나믹 프로그래밍
+# 재귀형식, 구하고 싶은 값은 이전 리스트값들의 min, max를 더함
+# 다이나믹 프로그래밍의 전형적인 형태는 보텀업 = 점화식 만들기
+# 그리디, 구현, 완전탐색으로 시간복잡도가 낮아지지않는다면, 
+# 다이나믹 프로그래밍 = 보텀업 = 상향식 = 반복문 = 리스트갯수만큼 초기화
+# 메모이제이션 = 하향식 = 탑다운 = 캐싱
+
+# 1. 1로 만들기
+# # 정수 X를 입력 받기
+# x = int(input())
+
+# # 앞서 계산된 결과를 저장하기 위한 DP 테이블 초기화
+# d = [0] * 1000001
+
+# # 다이나믹 프로그래밍(Dynamic Programming) 진행(보텀업)
+# for i in range(2, x + 1):
+#     # 현재의 수에서 1을 빼는 경우
+#     d[i] = d[i - 1] + 1
+#     # 현재의 수가 2로 나누어 떨어지는 경우
+#     if i % 2 == 0:
+#         d[i] = min(d[i], d[i // 2] + 1)
+#     # 현재의 수가 3으로 나누어 떨어지는 경우
+#     if i % 3 == 0:
+#         d[i] = min(d[i], d[i // 3] + 1)
+#     # 현재의 수가 5로 나누어 떨어지는 경우
+#     if i % 5 == 0:
+#         d[i] = min(d[i], d[i // 5] + 1)
+
+# print(d[x])
+
+
+# 2. 개미 전사
+# # 정수 N을 입력 받기
+# n = int(input())
+# # 모든 식량 정보 입력 받기
+# array = list(map(int, input().split()))
+
+# # 앞서 계산된 결과를 저장하기 위한 DP 테이블 초기화
+# d = [0] * 100
+
+# # 다이나믹 프로그래밍(Dynamic Programming) 진행 (보텀업)
+# d[0] = array[0]
+# d[1] = max(array[0], array[1]) 
+# for i in range(2, n):
+#     d[i] = max(d[i - 1], d[i - 2] + array[i])
+
+# # 계산된 결과 출력
+# print(d[n - 1])
+
+
+# 4. 효율적인 화폐 구성
+# # 정수 N, M을 입력 받기
+# n, m = map(int, input().split())
+# # N개의 화폐 단위 정보를 입력 받기
+# array = []
+# for i in range(n):
+#     array.append(int(input()))
+
+# # 한 번 계산된 결과를 저장하기 위한 DP 테이블 초기화
+# d = [10001] * (m + 1)
+
+# # 다이나믹 프로그래밍(Dynamic Programming) 진행(보텀업)
+# d[0] = 0
+# for i in range(n):
+#     for j in range(array[i], m + 1):
+#         if d[j - array[i]] != 10001: # (i - k)원을 만드는 방법이 존재하는 경우
+#             d[j] = min(d[j], d[j - array[i]] + 1)
+
+# # 계산된 결과 출력
+# if d[m] == 10001: # 최종적으로 M원을 만드는 방법이 없는 경우
+#     print(-1)
+# else:
+#     print(d[m])
+
+
+# 16장 다이나믹 프로그래밍 문제
+# 1. 금광
+# # 테스트 케이스(Test Case) 입력
+# for tc in range(int(input())):
+#     # 금광 정보 입력
+#     n, m = map(int, input().split())
+#     array = list(map(int, input().split()))
+
+#     # 다이나믹 프로그래밍을 위한 2차원 DP 테이블 초기화
+#     dp = []
+#     index = 0
+#     for i in range(n):
+#         dp.append(array[index:index + m])
+#         index += m
+
+#     # 다이나믹 프로그래밍 진행
+#     for j in range(1, m):
+#         for i in range(n):
+#             # 왼쪽 위에서 오는 경우
+#             if i == 0:
+#                 left_up = 0
+#             else:
+#                 left_up = dp[i - 1][j - 1]
+#             # 왼쪽 아래에서 오는 경우
+#             if i == n - 1:
+#                 left_down = 0
+#             else:
+#                 left_down = dp[i + 1][j - 1]
+#             # 왼쪽에서 오는 경우
+#             left = dp[i][j - 1]
+#             dp[i][j] = dp[i][j] + max(left_up, left_down, left)
+
+#     result = 0
+#     for i in range(n):
+#         result = max(result, dp[i][m - 1])
+
+#     print(result)
+
+
+# 4. 병사 배치하기
+# n = int(input())
+# array = list(map(int, input().split()))
+# # 순서를 뒤집어 '최장 증가 부분 수열' 문제로 변환
+# array.reverse()
+
+# # 다이나믹 프로그래밍을 위한 1차원 DP 테이블 초기화
+# dp = [1] * n
+
+# # 가장 긴 증가하는 부분 수열(LIS) 알고리즘 수행
+# for i in range(1, n):
+#     for j in range(0, i):
+#         if array[j] < array[i]:
+#             dp[i] = max(dp[i], dp[j] + 1)
+
+# # 열외해야 하는 병사의 최소 수를 출력
+# print(n - max(dp))
+
+
+
+
+
+
+
+
+
+# 9장. 최단 경로 알고리즘
+
+# import sys
+# input = sys.stdin.readline
+# INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# # 노드의 개수, 간선의 개수를 입력받기
+# n, m = map(int, input().split())
+# # 시작 노드 번호를 입력받기
+# start = int(input())
+# # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
+# graph = [[] for i in range(n + 1)]
+# # 방문한 적이 있는지 체크하는 목적의 리스트를 만들기
+# visited = [False] * (n + 1)
+# # 최단 거리 테이블을 모두 무한으로 초기화
+# distance = [INF] * (n + 1)
+
+# # 모든 간선 정보를 입력받기
+# for _ in range(m):
+#     a, b, c = map(int, input().split())
+#     # a번 노드에서 b번 노드로 가는 비용이 c라는 의미
+#     graph[a].append((b, c))
+
+# # 방문하지 않은 노드 중에서, 가장 최단 거리가 짧은 노드의 번호를 반환
+# def get_smallest_node():
+#     min_value = INF
+#     index = 0 # 가장 최단 거리가 짧은 노드(인덱스)
+#     for i in range(1, n + 1):
+#         if distance[i] < min_value and not visited[i]:
+#             min_value = distance[i]
+#             index = i
+#     return index
+
+# def dijkstra(start):
+#     # 시작 노드에 대해서 초기화
+#     distance[start] = 0
+#     visited[start] = True
+#     for j in graph[start]:
+#         distance[j[0]] = j[1]
+#     # 시작 노드를 제외한 전체 n - 1개의 노드에 대해 반복
+#     for i in range(n - 1):
+#         # 현재 최단 거리가 가장 짧은 노드를 꺼내서, 방문 처리
+#         now = get_smallest_node()
+#         visited[now] = True
+#         # 현재 노드와 연결된 다른 노드를 확인
+#         for j in graph[now]:
+#             cost = distance[now] + j[1]
+#             # 현재 노드를 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
+#             if cost < distance[j[0]]:
+#                 distance[j[0]] = cost
+
+# # 다익스트라 알고리즘을 수행
+# dijkstra(start)
+
+# # 모든 노드로 가기 위한 최단 거리를 출력
+# for i in range(1, n + 1):
+#     # 도달할 수 없는 경우, 무한(INFINITY)이라고 출력
+#     if distance[i] == INF:
+#         print("INFINITY")
+#     # 도달할 수 있는 경우 거리를 출력
+#     else:
+#         print(distance[i])
+
+# 파이썬은 1초에 약 2천만번의 연산이 가능하기 때문에 노드의 개수가 5천개 정도는 연산이 가능할 것이지만, 그 이상은 힘들것이다. 따라서 전형적인 순차탐색 다익스트라가 아닌, 아래의 우선순위 큐인 힙을 이용해 개선된 다익스트라를 실행해야한다.
+# import heapq
+# import sys
+# input = sys.stdin.readline
+# INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# # 노드의 개수, 간선의 개수를 입력받기
+# n, m = map(int, input().split())
+# # 시작 노드 번호를 입력받기
+# start = int(input())
+# # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
+# graph = [[] for i in range(n + 1)]
+# # 최단 거리 테이블을 모두 무한으로 초기화
+# distance = [INF] * (n + 1)
+
+# # 모든 간선 정보를 입력받기
+# for _ in range(m):
+#     a, b, c = map(int, input().split())
+#     # a번 노드에서 b번 노드로 가는 비용이 c라는 의미
+#     graph[a].append((b, c))
+
+# def dijkstra(start):
+#     q = []
+#     # 시작 노드로 가기 위한 최단 경로는 0으로 설정하여, 큐에 삽입
+#     heapq.heappush(q, (0, start))
+#     distance[start] = 0
+#     while q: # 큐가 비어있지 않다면
+#         # 가장 최단 거리가 짧은 노드에 대한 정보 꺼내기
+#         dist, now = heapq.heappop(q)
+#         # 현재 노드가 이미 처리된 적이 있는 노드라면 무시
+#         if distance[now] < dist:
+#             continue
+#         # 현재 노드와 연결된 다른 인접한 노드들을 확인
+#         for i in graph[now]:
+#             cost = dist + i[1]
+#             # 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
+#             if cost < distance[i[0]]:
+#                 distance[i[0]] = cost
+#                 heapq.heappush(q, (cost, i[0]))
+
+# # 다익스트라 알고리즘을 수행
+# dijkstra(start)
+
+# # 모든 노드로 가기 위한 최단 거리를 출력
+# for i in range(1, n + 1):
+#     # 도달할 수 없는 경우, 무한(INFINITY)이라고 출력
+#     if distance[i] == INF:
+#         print("INFINITY")
+#     # 도달할 수 있는 경우 거리를 출력
+#     else:
+#         print(distance[i])
+
+
+
+
+# 이제까지는 어느 한 노드에서 모든 노드를 찾는 다익스트라 과정이었다면, 지금부터는 모든노드에서 모든노드를 찾는 플로이드워셜 알고리즘이다. 노드의 갯수가 적은 경우 사용할 수 있다. 500개 이상 잘 안나옴.
+# INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# # 노드의 개수 및 간선의 개수를 입력받기
+# n = int(input())
+# m = int(input())
+# # 2차원 리스트(그래프 표현)를 만들고, 모든 값을 무한으로 초기화
+# graph = [[INF] * (n + 1) for _ in range(n + 1)]
+
+# # 자기 자신에서 자기 자신으로 가는 비용은 0으로 초기화
+# for a in range(1, n + 1):
+#     for b in range(1, n + 1):
+#         if a == b:
+#             graph[a][b] = 0
+
+# # 각 간선에 대한 정보를 입력 받아, 그 값으로 초기화
+# for _ in range(m):
+#     # A에서 B로 가는 비용은 C라고 설정
+#     a, b, c = map(int, input().split())
+#     graph[a][b] = c
+
+# # 점화식에 따라 플로이드 워셜 알고리즘을 수행
+# for k in range(1, n + 1):
+#     for a in range(1, n + 1):
+#         for b in range(1, n + 1):
+#             graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+# # 수행된 결과를 출력
+# for a in range(1, n + 1):
+#     for b in range(1, n + 1):
+#         # 도달할 수 없는 경우, 무한(INFINITY)이라고 출력
+#         if graph[a][b] == 1e9:
+#             print("INFINITY", end=" ")
+#         # 도달할 수 있는 경우 거리를 출력
+#         else:
+#             print(graph[a][b], end=" ")
+#     print()
+
+
+
+
+# 1. 전보 - 다익스트라 힙
+# import heapq
+# import sys
+# input = sys.stdin.readline
+# INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# # 노드의 개수, 간선의 개수, 시작 노드를 입력받기
+# n, m, start = map(int, input().split())
+# # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
+# graph = [[] for i in range(n + 1)]
+# # 최단 거리 테이블을 모두 무한으로 초기화
+# distance = [INF] * (n + 1)
+
+# # 모든 간선 정보를 입력받기
+# for _ in range(m):
+#     x, y, z = map(int, input().split())
+#     # X번 노드에서 Y번 노드로 가는 비용이 Z라는 의미
+#     graph[x].append((y, z))
+
+# def dijkstra(start):
+#    q = []
+#    # 시작 노드로 가기 위한 최단 경로는 0으로 설정하여, 큐에 삽입
+#    heapq.heappush(q, (0, start))
+#    distance[start] = 0
+#    while q: # 큐가 비어있지 않다면
+#         # 가장 최단 거리가 짧은 노드에 대한 정보를 꺼내기
+#         dist, now = heapq.heappop(q)
+#         if distance[now] < dist:
+#             continue
+#         # 현재 노드와 연결된 다른 인접한 노드들을 확인
+#         for i in graph[now]:
+#             cost = dist + i[1]
+#             # 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
+#             if cost < distance[i[0]]:
+#                 distance[i[0]] = cost
+#                 heapq.heappush(q, (cost, i[0]))
+
+# # 다익스트라 알고리즘을 수행
+# dijkstra(start)
+
+# # 도달할 수 있는 노드의 개수
+# count = 0
+# # 도달할 수 있는 노드 중에서, 가장 멀리 있는 노드와의 최단 거리
+# max_distance = 0
+# for d in distance:
+#     # 도달할 수 있는 노드인 경우
+#     if d != 1e9:
+#         count += 1
+#         max_distance = max(max_distance, d)
+
+# # 시작 노드는 제외해야 하므로 count - 1을 출력
+# print(count - 1, max_distance)
+
+
+# 2. 미래 도시 - 플로이드 워셜
+# INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# # 노드의 개수 및 간선의 개수를 입력받기
+# n, m = map(int, input().split())
+# # 2차원 리스트(그래프 표현)를 만들고, 모든 값을 무한으로 초기화
+# graph = [[INF] * (n + 1) for _ in range(n + 1)]
+
+# # 자기 자신에서 자기 자신으로 가는 비용은 0으로 초기화
+# for a in range(1, n + 1):
+#     for b in range(1, n + 1):
+#         if a == b:
+#             graph[a][b] = 0
+
+# # 각 간선에 대한 정보를 입력 받아, 그 값으로 초기화
+# for _ in range(m):
+#     # A와 B가 서로에게 가는 비용은 1이라고 설정
+#     a, b = map(int, input().split())
+#     graph[a][b] = 1
+#     graph[b][a] = 1
+
+# # 거쳐 갈 노드 X와 최종 목적지 노드 K를 입력받기
+# x, k = map(int, input().split())
+
+# # 점화식에 따라 플로이드 워셜 알고리즘을 수행
+# for k in range(1, n + 1):
+#     for a in range(1, n + 1):
+#         for b in range(1, n + 1):
+#             graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+# # 수행된 결과를 출력
+# distance = graph[1][k] + graph[k][x]
+
+# # 도달할 수 없는 경우, -1을 출력
+# if distance >= 1e9:
+#     print("-1")
+# # 도달할 수 있다면, 최단 거리를 출력
+# else:
+#     print(distance)
+
+
+
+
+
+
+
+
+
+
+# 10장. 기타 그래프 이론
+# 개선된 서로소 집합 알고리즘 - 경로 압축
+# # 특정 원소가 속한 집합을 찾기
+# def find_parent(parent, x):
+#     # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+#     if parent[x] != x:
+#         parent[x] = find_parent(parent, parent[x])
+#     return parent[x]
+
+# # 두 원소가 속한 집합을 합치기
+# def union_parent(parent, a, b):
+#     a = find_parent(parent, a)
+#     b = find_parent(parent, b)
+#     if a < b:
+#         parent[b] = a
+#     else:
+#         parent[a] = b
+
+# # 노드의 개수와 간선(Union 연산)의 개수 입력 받기
+# v, e = map(int, input().split())
+# parent = [0] * (v + 1) # 부모 테이블 초기화하기
+
+# # 부모 테이블상에서, 부모를 자기 자신으로 초기화
+# for i in range(1, v + 1):
+#     parent[i] = i
+
+# # Union 연산을 각각 수행
+# for i in range(e):
+#     a, b = map(int, input().split())
+#     union_parent(parent, a, b)
+
+# # 각 원소가 속한 집합 출력하기
+# print('각 원소가 속한 집합: ', end='')
+# for i in range(1, v + 1):
+#     print(find_parent(parent, i), end=' ')
+
+# print()
+
+# # 부모 테이블 내용 출력하기
+# print('부모 테이블: ', end='')
+# for i in range(1, v + 1):
+#     print(parent[i], end=' ')
+
+
+# 서로소 집합을 활용한 사이클 판별
+# # 특정 원소가 속한 집합을 찾기
+# def find_parent(parent, x):
+#     # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+#     if parent[x] != x:
+#         parent[x] = find_parent(parent, parent[x])
+#     return parent[x]
+
+# # 두 원소가 속한 집합을 합치기
+# def union_parent(parent, a, b):
+#     a = find_parent(parent, a)
+#     b = find_parent(parent, b)
+#     if a < b:
+#         parent[b] = a
+#     else:
+#         parent[a] = b
+
+# # 노드의 개수와 간선(Union 연산)의 개수 입력 받기
+# v, e = map(int, input().split())
+# parent = [0] * (v + 1) # 부모 테이블 초기화하기
+
+# # 부모 테이블상에서, 부모를 자기 자신으로 초기화
+# for i in range(1, v + 1):
+#     parent[i] = i
+
+# cycle = False # 사이클 발생 여부
+
+# for i in range(e):
+#     a, b = map(int, input().split())
+#     # 사이클이 발생한 경우 종료
+#     if find_parent(parent, a) == find_parent(parent, b):
+#         cycle = True
+#         break
+#     # 사이클이 발생하지 않았다면 합집합(Union) 연산 수행
+#     else:
+#         union_parent(parent, a, b)
+
+# if cycle:
+#     print("사이클이 발생했습니다.")
+# else:
+#     print("사이클이 발생하지 않았습니다.")
+
+
+# 크루스칼 알고리즘 - 모든 선인 연결된 사이클이 없는 신장트리
+# # 특정 원소가 속한 집합을 찾기
+# def find_parent(parent, x):
+#     # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+#     if parent[x] != x:
+#         parent[x] = find_parent(parent, parent[x])
+#     return parent[x]
+
+# # 두 원소가 속한 집합을 합치기
+# def union_parent(parent, a, b):
+#     a = find_parent(parent, a)
+#     b = find_parent(parent, b)
+#     if a < b:
+#         parent[b] = a
+#     else:
+#         parent[a] = b
+
+# # 노드의 개수와 간선(Union 연산)의 개수 입력 받기
+# v, e = map(int, input().split())
+# parent = [0] * (v + 1) # 부모 테이블 초기화하기
+
+# # 모든 간선을 담을 리스트와, 최종 비용을 담을 변수
+# edges = []
+# result = 0
+
+# # 부모 테이블상에서, 부모를 자기 자신으로 초기화
+# for i in range(1, v + 1):
+#     parent[i] = i
+
+# # 모든 간선에 대한 정보를 입력 받기
+# for _ in range(e):
+#     a, b, cost = map(int, input().split())
+#     # 비용순으로 정렬하기 위해서 튜플의 첫 번째 원소를 비용으로 설정
+#     edges.append((cost, a, b))
+
+# # 간선을 비용순으로 정렬
+# edges.sort()
+
+# # 간선을 하나씩 확인하며
+# for edge in edges:
+#     cost, a, b = edge
+#     # 사이클이 발생하지 않는 경우에만 집합에 포함
+#     if find_parent(parent, a) != find_parent(parent, b):
+#         union_parent(parent, a, b)
+#         result += cost
+
+# print(result)
+
+
+
+# 위상정렬 - 싸이클이 없는 방향 그래프, 큐의 나간 순서 그대로 출력
+# from collections import deque
+
+# # 노드의 개수와 간선의 개수를 입력 받기
+# v, e = map(int, input().split())
+# # 모든 노드에 대한 진입차수는 0으로 초기화
+# indegree = [0] * (v + 1)
+# # 각 노드에 연결된 간선 정보를 담기 위한 연결 리스트 초기화
+# graph = [[] for i in range(v + 1)]
+
+# # 방향 그래프의 모든 간선 정보를 입력 받기
+# for _ in range(e):
+#     a, b = map(int, input().split())
+#     graph[a].append(b) # 정점 A에서 B로 이동 가능
+#     # 진입 차수를 1 증가
+#     indegree[b] += 1
+
+# # 위상 정렬 함수
+# def topology_sort():
+#     result = [] # 알고리즘 수행 결과를 담을 리스트
+#     q = deque() # 큐 기능을 위한 deque 라이브러리 사용
+
+#     # 처음 시작할 때는 진입차수가 0인 노드를 큐에 삽입
+#     for i in range(1, v + 1):
+#         if indegree[i] == 0:
+#             q.append(i)
+
+#     # 큐가 빌 때까지 반복
+#     while q:
+#         # 큐에서 원소 꺼내기
+#         now = q.popleft()
+#         result.append(now)
+#         # 해당 원소와 연결된 노드들의 진입차수에서 1 빼기
+#         for i in graph[now]:
+#             indegree[i] -= 1
+#             # 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
+#             if indegree[i] == 0:
+#                 q.append(i)
+
+#     # 위상 정렬을 수행한 결과 출력
+#     for i in result:
+#         print(i, end=' ')
+
+# topology_sort()
