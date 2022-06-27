@@ -1,4 +1,4 @@
-## Today I Learned.
+## Today I Learned(최근 문제모음).
 
 - 백준 & 프로그래머스
 
