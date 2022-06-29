@@ -2281,3 +2281,35 @@ for i in range(2, n+1):
         dp[i] = min(dp[i], dp[i//3] + 1) # 3으로 나눠지면, 기존횟수랑 나누어떨어지는 횟수 중 작은값
 
 print(dp[n])
+--------------------------------------------------------------------------------------------------------------
+피보나치 함수
+# 동적 계획법 (Dynamic Programming)
+ - Recursive + Memorization
+ - 순서를 직접 써서, 점화식 찾자!
+   -> 작은 문제의 해를 테이블에 저장한 뒤, 나중에 읽어서 사용
+ - 상향식 (작은 -> 큰) <-> 하향식 (분할 정복)
+ - 대표적인 예로 피보나치 수열이 있다.
+
+# 일반 풀이
+def fib(N):
+    zeros=[1,0,1] # 예시 3 이외부터 시작
+    ones=[0,1,1]
+    if N >= 3:
+        for i in range(2,N):
+            zeros.append(zeros[i-1] + zeros[i]) # 0의 피보나치 순서를 추가
+            ones.append(ones[i-1] + ones[i]) # 1의 피보나치 순서를 추가
+    print(f"{zeros[N]} {ones[N]}") # 출력
+ 
+T = int(input())
+for _ in range(T):
+    N = int(input())
+    fib(N)
+
+# 숏코딩 풀이 - 와 이건 사람이 아니네 생각하는게;
+T = int(input())
+for _ in range(T):
+    N = int(input())
+    zero,one=1,0 # zero: 0개수, one: 1개수
+    for i in range(N):
+        zero,one = one,zero+one # zero와 one에 그 자체로 피보나치적용
+    print(zero,one)
