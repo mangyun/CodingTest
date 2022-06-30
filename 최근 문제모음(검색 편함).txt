@@ -2313,3 +2313,43 @@ for _ in range(T):
     for i in range(N):
         zero,one = one,zero+one # zero와 one에 그 자체로 피보나치적용
     print(zero,one)
+--------------------------------------------------------------------------------------------------------------
+토마토
+이 문제의 핵심은 여러 곳에서 시작하는 bfs였음!!
+그래서 모든 좌표에서 1일때 큐에 박고시작함!!
+matrix[nx][ny] = matrix[x][y] + 1 # 최소 횟수 전염되는거 기억!
+
+import sys
+
+input = sys.stdin.readline
+
+from collections import deque
+
+m, n = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(n)]
+queue = deque([])
+dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
+res = 0
+
+for i in range(n):
+    for j in range(m):
+        if matrix[i][j] == 1:
+            queue.append([i, j]) # 기존과 다르게 일단 박고 시작함.
+
+def bfs():
+    while queue:
+        x, y = queue.popleft()
+        for i in range(4):
+            nx, ny = dx[i] + x, dy[i] + y
+            if 0 <= nx < n and 0 <= ny < m and matrix[nx][ny] == 0:
+                matrix[nx][ny] = matrix[x][y] + 1 # 최소 횟수 전염되는거 기억!
+                queue.append([nx, ny])
+
+bfs() # 박은 큐들을 시작
+for i in matrix:
+    for j in i:
+        if j == 0:
+            print(-1)
+            exit(0) # 두개 반복문 바로 탈출 = 종료
+    res = max(res, max(i)) # 모든 배열 중 가장 최댓값
+print(res - 1)
