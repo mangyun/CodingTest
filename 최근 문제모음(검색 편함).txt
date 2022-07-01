@@ -2353,3 +2353,30 @@ for i in matrix:
             exit(0) # 두개 반복문 바로 탈출 = 종료
     res = max(res, max(i)) # 모든 배열 중 가장 최댓값
 print(res - 1)
+--------------------------------------------------------------------------------------------------------------
+계단오르기
+마지막계단을 무조건 밟아야해서, 올라 가는거말고, 아래에서부터 올라온다고 생각하기!
+이런 사고의 전환을 길러야한다!
+
+import sys
+
+input = sys.stdin.readline
+
+N = int(input())
+
+stair = [0]
+for _ in range(N):
+    stair.append(int(input()))
+
+if N == 1: 
+    print(stair[1])
+else:
+    dp = [0] * (N+1) 
+    dp[1] = stair[1] #첫번째 계단
+    dp[2] = stair[1] + stair[2] #두번째 계단
+
+    for i in range(3, N+1): # 세번째부터 지정
+        # 한칸 이전에서 올라올때는 그 칸에서 아래아래까지 더해줌, 두칸 이전에서는 상관없음
+        dp[i] = max(dp[i-3]+stair[i-1]+stair[i], dp[i-2]+stair[i])  
+
+    print(dp[N])
