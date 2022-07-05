@@ -2469,3 +2469,21 @@ for i in range(1, len(arr)):
     dp[i] = max(arr[i], dp[i-1] + arr[i]) # 더하다 음수가 나오면, 그냥 해당 원소로 교체
 
 print(max(dp))
+--------------------------------------------------------------------------------------------------------------
+포도주 시식
+역시 순서대로 규칙 찾아서 점화식 찾는게 근본이다,, 근데 그게 어렵지,,,시바
+계단오르기 문제같이, 앞에서 순서대로 마셔가는게아니라, 내 기준 이전에 와인을 몇개마실지 정해야한다.
+이런 사고의 전환이 언제 길러질까,, 답답하다 진짜 명윤아,,
+
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+wines = [0] + [int(input()) for _ in range(n)] + [0]
+dp = [0] * (n+2)
+dp[1] = wines[1]
+dp[2] = dp[1] + wines[2]
+
+for i in range(3, n+1):
+    dp[i] = max(dp[i-3]+wines[i-1]+wines[i], dp[i-2]+wines[i], dp[i-1])
+print(dp[n])
