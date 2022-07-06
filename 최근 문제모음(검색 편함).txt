@@ -2493,6 +2493,10 @@ print(dp[n])
 visit = [[[0]*2 for _ in range(m)] for _ in range(n)] # 3차원 visit 스킬
 웬만하면 visit 이용하는습관 들이자,, 다 쓰는 이유가 있으니깐,, ㅇㅋ?
 
+N과 M의 범위가 1 이상 1000 이하이기 때문에 브루트포스 방식도 불가능했고,
+최단거리를 만들기 위한 벽을 찾는 방법을 찾는 것도 잘 안떠오름
+모든 작업을 한 번의 BFS 탐색을 통해 처리해야했기 때문에, 최적의 벽을 '탐색'하는 것보다는 '기록'하는 방식이 필요했드아,,
+
 import sys
 from collections import deque
 
