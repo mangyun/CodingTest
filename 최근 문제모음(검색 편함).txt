@@ -2541,3 +2541,23 @@ def bfs(x, y, z):
     return -1
 
 print(bfs(0, 0, 0))
+--------------------------------------------------------------------------------------------------------------
+1, 2, 3 더하기
+조건 찾느라 뻘짓하다가, 수가 작고, 합 갯수 규칙찾는거라 DP인걸 깨달음,, 답없는 이명윤
+정말 DP스럽게 접근해야 하는 문제, 점화식을 잘 세우는게 문제의 전부다.
+걍 DP는 규칙 그리는게 짱이다! 니가 짱먹어라 짱~
+
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+n = int(input())
+t = [int(input()) for _ in range(n)]
+dp = [1, 2, 4, 0 , 0, 0, 0, 0, 0, 0]
+
+for i in range(3,10):
+  dp[i] = dp[i-3]+ dp[i-2] +dp[i-1]
+
+for i in range(n):
+  print(dp[t[i]-1])
