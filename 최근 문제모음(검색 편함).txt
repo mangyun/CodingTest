@@ -2630,7 +2630,7 @@ dy = [0, -1, 0, 1]
 def DFS(x, y, ans):
     global answer
 
-    answer = max(ans, answer)
+    answer = max(ans, answer) # 최대값 갱신
 
     # 좌우상화 다 확인한다
     for i in range(4):
@@ -2639,13 +2639,13 @@ def DFS(x, y, ans):
 
         # index 벗어나지 않는지 체크하고, 새로운 칸이 중복되는 알파벳인지 체크한다
         if ((0 <= nx < R) and (0 <= ny < C)) and (board[nx][ny] not in passed):
-            passed.append(board[nx][ny]) # 제일 중요한 백트래킹 부분
-            DFS(nx, ny, ans+1)
-            passed.remove(board[nx][ny])
+            passed.append(board[nx][ny]) # 제일 중요한 백트래킹 부분~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            DFS(nx, ny, ans+1) # 다음 count로 보내버리고
+            passed.remove(board[nx][ny]) # 이제 다른 경우일때 최대 구하기위해, 현재 추가한건 제거
 
 R, C = map(int, sys.stdin.readline().split())
 board = [list(sys.stdin.readline().strip()) for _ in range(R)]
-passed = set()
+passed = set() # 중복은 편하게 처리, 시간도 빠름
 
 answer = 1
 DFS(0, 0, answer)
