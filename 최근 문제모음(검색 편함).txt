@@ -2704,3 +2704,35 @@ for nums in range(1000001):
             min_count = min(min_count, abs(int(nums) - target) + len(nums))
 
 print(min_count)
+--------------------------------------------------------------------------------------------------------------
+평범한 배낭
+이런 문제는 유명한 냅색 알고리즘, 간단하게 말하면, 한 도둑이 훔치는 배낭의 무게 최댓값이 정해져 있고, 
+일정 가치와 무게가 있는 짐들을 배낭에 넣을 때, 가치의 합이 최대가 되도록 짐을 고르는 방법을 찾는 문제이다.
+
+냅색 알고리즘은 담을 수 있는 물건이 나눌 수 있냐 없냐에 따라 나눈다.
+1. 담을 수 있는 물건이 나누어 질 때(설탕 몇 g 등): 분할가능 배낭문제(Fractional Knapsack Problem)
+2. 담을 수 있는 물건이 나누어 질 수 없을 때(담는다 or 안담는다): 0-1 배낭문제(0-1Knapsack Problem)
+해당 문제는 0-1 배낭문제의 경우다.
+
+표에 무게를 각 시도마다 기록하는 방법을 이용한다.
+만약 무게가 작다면, 저장된 가치와 지금 무게의 가치를 비교해 저장시켜준다.
+이해안되면, https://codingmovie.tistory.com/48 참고.
+
+import sys
+
+input = sys.stdin.readline
+
+N,K = map(int,input().split())
+items = []
+for _ in range(N):
+    w,v = map(int,input().split())
+    items.append((w,v))
+  
+dp = [0 for _ in range(K+1)]
+
+for item in items:
+    w,v = item
+    for i in range(K,w-1,-1):
+        dp[i] = max(dp[i],dp[i-w]+v)
+      
+print(dp[-1])
