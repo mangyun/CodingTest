@@ -2736,3 +2736,21 @@ for item in items:
         dp[i] = max(dp[i],dp[i-w]+v)
       
 print(dp[-1])
+--------------------------------------------------------------------------------------------------------------
+파도반 수열
+그냥 조건보고 이건 dp다 싶어서
+원소 규칙보고, 점화식 세웠다.
+
+import sys
+
+input = sys.stdin.readline
+
+N = int(input())
+arr = [int(input()) for _ in range(N)]
+seq = [1, 1, 1, 2, 2]
+
+for i in range(5, max(arr)):
+    seq.append(seq[i-1]+seq[i-5])
+
+for i in arr:
+    print(seq[i-1])
