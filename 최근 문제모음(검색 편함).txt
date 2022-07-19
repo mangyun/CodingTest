@@ -2826,3 +2826,25 @@ for _ in range(int(input())):
                         bipatite = False
 
     print('YES' if bipatite else 'NO')
+--------------------------------------------------------------------------------------------------------------
+정수 삼각형
+더해가면서 합이 최대가 되는 경우는 직관적으로 dp로도 생각할수 있음!!!!!!
+dp도 2차원 배열로 풀기도 한다는 걸 알자~~~~~~
+맨 밑의 자리 즉, 4 5 2 6 5 각 자리에 올 수 있는 가장 큰 값을 구하고, 
+그 값들 중에서 가장 큰 값을 출력해줌.
+
+n = int(input())
+t = []
+for i in range(n):
+    t.append(list(map(int, input().split())))
+k = 2
+for i in range(1, n):
+    for j in range(k):
+        if j == 0: # 줄의 맨 처음
+            t[i][j] = t[i][j] + t[i - 1][j]
+        elif i == j: # 맨 끝
+            t[i][j] = t[i][j] + t[i - 1][j - 1]
+        else: # 양 쪽 대각선 비교
+            t[i][j] = max(t[i - 1][j - 1], t[i - 1][j]) + t[i][j]
+    k += 1
+print(max(t[n - 1]))
