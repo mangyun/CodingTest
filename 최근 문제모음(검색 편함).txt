@@ -2942,3 +2942,61 @@ min_diff = int(1e9)
 
 dfs(0, 0)
 print(min_diff)
+--------------------------------------------------------------------------------------------------------------
+테트로미노
+완탐으로, 전부 백트래킹 해서 모양을 알아봐야함
+대신, ㅗ 모양은 예외처리로 따로 해줘야한다.
+if a + maxv*(4-count) <= max_value: # 기준을 최대값으로 전부 곱해서 더했는데도 작다면 더이상 할 필요가 없어짐.
+    return
+위 부분이 제일 신박했고, 굳이 더 이상 진행할 필요가 없는 백트래킹 조건이었음
+
+
+import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+
+g = [list(map(int, input().split())) for _ in range(n)]
+
+dx, dy = [-1,1,0,0], [0,0,-1,1]
+c = 0
+
+maxv = max(map(max, g))
+max_value = 0
+
+def dfs(x,y, count, a):
+  global max_value
+
+  if a + maxv*(4-count) <= max_value: # 기준을 최대값으로 전부 곱해서 더했는데도 작다면 더이상 할 필요가 없어짐.
+    return
+
+  if count == 4: # 블록이 4개면 완성
+    max_value = max(max_value, a)
+    return
+
+  for i in range(4):
+    nx = x + dx[i]
+    ny = y + dy[i]
+
+    if 0<= nx<n and 0<= ny <m and visit[nx][ny] == 0:
+
+      if count == 2: # ㅗ 모양 때문에 2칸만 전진하고 그 자리에서 다시 새출발한다는 느낌.
+        visit[nx][ny] = 1
+        dfs(x,y,count+1,a+g[nx][ny])
+        visit[nx][ny] = 0
+      
+      visit[nx][ny] = 1 # ㅗ모양 말고, 나머지 이외 모양들은 원래대로 진행
+      dfs(nx,ny,count+1,a+g[nx][ny]) # 모양 만들러 더 진행
+      visit[nx][ny] = 0 # 다 만들었으면 다시 전부 방문 해제 해줌.
+      
+visit = [[0]*m for _ in range(n)]
+
+for i in range(n):
+  for j in range(m):
+    visit[i][j] = 1
+    dfs(i,j, 1, g[i][j])
+    visit[i][j] = 0 # 다 만들었으면 다시 전부 방문 해제 해줌.
+
+print(max_value)
+
+
