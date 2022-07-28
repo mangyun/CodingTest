@@ -2998,5 +2998,21 @@ for i in range(n):
     visit[i][j] = 0 # 다 만들었으면 다시 전부 방문 해제 해줌.
 
 print(max_value)
+---------------------------------------------------------------------------------------------------------------
+다리 놓기
+당연히 조합문제인줄 알았는데, dp로도 하나하나 규칙써서 풀면 가능하긴 했음.
+combinations 쓰려다가 n, m커져서 메모리 오류 계속 났었음.
+그래서 개수만 알고싶을때는, math.comb 쓰면된다~~~~
 
+import sys
+
+input = sys.stdin.readline
+
+import math
+
+t = int(input())
+
+for _ in range(t):
+    n, m = map(int, input().split(' '))
+    print(math.comb(m, n)) #갯수만 알고싶으면 combinations 보다 효율적임.
 
