@@ -3103,3 +3103,45 @@ for i in g:
     c = max(c, max(j)) # 최대 갱신
 
 print(c-1) # 1에서 시작해서 마지막엔 -1 해줘야 함
+---------------------------------------------------------------------------------------------------------------
+치킨 배달
+n, m이 보기좋게 작은 조건 보니까 왠지 완탐문제 같았음.
+지도문제여서 bfs, dfs 착각할만한 문제였지만, 아니나 다를까 전부 구해서 최소 구하는 것 같아 완탐임
+
+각 집에서 치킨집들 최소거리를 구해서 총 거리를 구하고, 또 그 총거리 중에서 최솟값이 답이었음..
+출력이 참 생각하기 어려웠다 제발 정신차리자 머리좀 굴려라!!!!!!!!
+for i in combinations(c, m): # 치킨집 섞은 조합
+이 부분을 바로 쓰는거 자체도 가시적이 아니라 이해가 안갔다... 이제는 이해감! 조합 바로 쓸 수 있었음!
+
+import sys
+
+input = sys.stdin.readline
+
+from itertools import combinations
+
+n, m = map(int, input().split())
+g = [list(map(int, input().split())) for _ in range(n)]
+
+d = []
+c = []
+
+for i in range(n):
+  for j in range(n):
+    if g[i][j] == 1:
+      d.append([i,j])
+    elif g[i][j] == 2:
+      c.append([i,j])
+
+result = 1000000
+
+for i in combinations(c, m): # 치킨집 섞은 조합
+  s = 0
+  for j in d: # 집 고르기
+    k = 100000
+    for t in range(m): # 치킨집 고르기
+      k = min(k, abs(i[t][0]-j[0])+abs(i[t][1]-j[1])) # 고른 집에서 치킨집들 최소거리 더하기
+    s += k # 각 집의 최소거리들을 더해서 총 거리 구하기
+
+  result = min(result, s) # 가능한 치킨집 조합들에서 나온 총 거리 중, 최소값 갱신
+
+print(result)
