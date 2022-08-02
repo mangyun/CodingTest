@@ -3145,3 +3145,4 @@ for i in combinations(c, m): # 치킨집 섞은 조합
   result = min(result, s) # 가능한 치킨집 조합들에서 나온 총 거리 중, 최소값 갱신
 
 print(result)
+ 
