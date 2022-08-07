@@ -3225,3 +3225,70 @@ for i in range(2,n+1):
   dy[i] = dy[i-1]+2*dy[i-2]
 
 print(dy[n]%10007)
+---------------------------------------------------------------------------------------------------------------
+암호 만들기
+전형적인 dfs 백트래킹 이었다.
+if len(s)==l and 0<s.count('a')+s.count('e')+s.count('i')+s.count('o')+s.count('u')<l-1:
+이렇게 모음 갯수 세는거 신박했음.
+s.append(arr[i])
+        dfs(i+1)
+        s.pop()
+2번 풀이의 그냥 추가하고 더 깊이들어가고, 다시 빼는 스킬을 더 연마하자
+1번 풀이는 내 풀이
+
+1.
+import sys
+input = sys.stdin.readline
+
+l, m = map(int, input().split())
+g = list(input().split())
+g.sort()
+
+visit = [0] * m
+r = []
+
+def dfs(str, idx):
+
+  if len(str) == l:
+    mo = 0
+    ja = 0
+    for i in str:
+      if i in ['a','e','i','o','u']:
+        mo += 1
+      else:
+        ja += 1
+
+    if mo >= 1 and ja >=2:
+      r.append(str)
+      return
+  
+  for i in range(idx, m):
+    if visit[i] == 0:
+      visit[i] = 1
+      dfs(str + g[i], i+1)
+      visit[i] = 0
+    
+s = ''
+i= 0
+
+dfs(s, i)
+
+for i in r:
+  print(i)
+
+2. count로 갯수세는거, 백트래킹 신박했음!
+l,c=map(int,input().split())
+arr=list(input().split())
+arr.sort()
+s=[]
+
+def dfs(a):
+    if len(s)==l and 0<s.count('a')+s.count('e')+s.count('i')+s.count('o')+s.count('u')<l-1:
+        print(*s)
+        return
+    for i in range(a,c):
+
+        s.append(arr[i])
+        dfs(i+1)
+        s.pop()
+dfs(0)
