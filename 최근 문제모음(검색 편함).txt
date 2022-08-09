@@ -3294,6 +3294,11 @@ def dfs(a):
 dfs(0)
 --------------------------------------------------------------------------------------------------------------
 숨바꼭질 3
+그냥 최단거리라 아무리 생각해봐도 전형적인 bfs 문제였다.
+내가 헷갈린걸 해결한 생각은 (이미 그 위치를 한번 방문했으면 그 값 고정이다 -> 왜냐면 그보다 나중에 방문한 것들은 이미 최단거리가 아니기 때문!)
+나는 이미 한번 방문했던 곳에 또 도착해서 값이 바껴도 되는거 아닌가?라는 생각이었는데, 역시 쓰잘데기없는 생각이었다. 
+제일 중요한건, x*2가 제일 먼저 방문해야 하기때문에, deque에 appendleft로 가장 먼저 붙여준다.
+
 import sys
 input = sys.stdin.readline
 
@@ -3301,7 +3306,7 @@ from collections import deque
 
 def search(N):
 
-    visited = [0] * 100001
+    visited = [0] * 100001 # 방문을 일단 최대 범위로 지정하는 것도 중요!~~~~~~~~
     Q = deque()
     Q.append(N)
 
@@ -3310,13 +3315,13 @@ def search(N):
         if position == K:
             return visited[position]
 
-        for next_position in (position + 1, position - 1, position * 2) :
+        for next_position in (position + 1, position - 1, position * 2) : # 이것도 중요!~~~~~~~~
 
-            if 0 <= next_position < 100001:
+            if 0 <= next_position < 100001: # 아 물론 범위 설정도 중요함!!!!!!~~~~~~~~~~~~~~~~
                 if visited[next_position] == 0:
                     if next_position == position * 2 and next_position != 0:
                         visited[next_position] = visited[position]
-                        Q.appendleft(next_position)
+                        Q.appendleft(next_position) # 제일 중요함!!!!~~~~~~~~~~~~~~~~~~~~~~~~
                     else:
                         visited[next_position] = visited[position] + 1
                         Q.append(next_position)
