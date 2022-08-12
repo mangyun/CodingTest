@@ -3328,4 +3328,4 @@ def search(N):
 
 N, K = map(int, input().split())
 answer = search(N)
-print(answer)
+print(answer) 
