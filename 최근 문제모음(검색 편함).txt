@@ -3329,3 +3329,95 @@ def search(N):
 N, K = map(int, input().split())
 answer = search(N)
 print(answer) 
+--------------------------------------------------------------------------------------------------------------
+빙산
+일단 제일 개그튼 bfs 문제였고, 아니지 그냥 내가 멍청하거지!!!!!!!!!!!!!!!!!!!! 하.,
+함수를 각각 차근차근 순서대로 생각하면 나쁘지 않은 문제였다.(역시 한글로 써야하나? 코딩애플센세?)
+1. 주변에 붙어있는 빙산알갱이 찾는 함수
+2. 그냥 일반적인 빙산덩어리 몇개 있는지 찾는 함수
+2. 지금 현재 탐색해봤을때 얼음이 아예 없으면, 그냥 바로 0 출력
+3. 이제 녹이는 작업, 중요한건 from copy import deepcopy해서 녹이기전의 temp_g = deepcopy(g)해서 
+-> if temp_g[i][j] != 0: # 녹이기전이랑 비교하려고, 일단 deepcopy함.
+4. 마지막으로 1년 주변꺼 다 녹인거로, 덩어리 갯수 체크, 떨어져 있는 갯수 나오면 출력, 아니면 year += 1 
+
+import sys
+
+input = sys.stdin.readline
+
+# deepcopy용 import
+from copy import deepcopy
+from collections import deque
+
+dx, dy = [-1,1,0,0], [0,0,-1,1]
+
+# 빙산 주변 갯수 세기
+def count_ad(x, y):
+  c = 0
+
+  for i in range(4):
+    nx = x + dx[i]
+    ny = y + dy[i]
+
+    if 0<=nx<n and 0<=ny<m:
+      if temp_g[nx][ny] == 0:
+        c += 1
+
+  return c
+
+
+# 덩어리의 각 빙산세기:
+def count_ice(startx,starty):
+  q = deque()
+  q.append((startx,starty))
+  visit[startx][starty] = 1
+
+  while q:
+    x, y = q.popleft()
+
+    for i in range(4):
+      nx = x + dx[i]
+      ny = y + dy[i]
+
+      if 0<=nx<n and 0<=ny<m and g[nx][ny] != 0 and visit[nx][ny] ==0:
+        visit[nx][ny] = 1
+        q.append((nx,ny))
+
+
+n, m = map(int, input().split())
+g = [list(map(int, input().split())) for _ in range(n)]
+year = 1
+
+# 1년씩 반복
+while True:
+  visit = [[0]*m for _ in range(n)]
+  piece = 0
+
+  # 빙산이 다 녹았을 때 까지 분리 안된거 체크
+  f = True
+  for i in range(n):
+    for j in range(m):
+      if g[i][j] != 0:
+        f = False
+  if f:
+    print(0)
+    break
+
+  # 빙산 한번 녹을때 마다 업데이트
+  temp_g = deepcopy(g)
+  for i in range(1,n-1):
+    for j in range(1,m-1):
+      if temp_g[i][j] != 0: # 녹이기전이랑 비교하려고, 일단 deepcopy함.
+        g[i][j] = max(0, g[i][j] - count_ad(i, j))
+
+  # 1년에 주변꺼 다 녹인거로 비교
+  for i in range(1,n-1):
+    for j in range(1,m-1):
+      if not visit[i][j] and g[i][j] != 0:
+        count_ice(i,j)
+        piece += 1
+
+  if piece >= 2:
+    print(year)
+    break
+  
+  year+=1
