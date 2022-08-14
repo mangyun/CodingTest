@@ -281,7 +281,9 @@ print(result)
 섬의개수
 참고
 대체 visited같은 체커는 언제쓰는가?
+다시 풀어보니 그냥 visit 안쓰고 했고, 이번엔 가로 세로 구분 잘해서 넣었다. 
 
+1. 예전 dfs 버전
 import sys
 sys.setrecursionlimit(5000000)
 
@@ -312,7 +314,50 @@ while True:
         dfs(i,j)
         c += 1
              
-  print(c) 
+  print(c)
+
+2. bfs로 오랜만에 다시 풀어봄.
+import sys
+
+input = sys.stdin.readline
+
+from collections import deque
+
+dx, dy = [-1,1,0,0,-1,-1,1,1], [0,0,-1,1,1,-1,1,-1]
+
+def bfs(a,b):
+    q = deque()
+    q.append((a,b))
+   
+    while q:
+      x, y = q.popleft()
+  
+      for i in range(8):
+        nx = x + dx[i]
+        ny = y + dy[i]
+  
+        if 0<= nx < h and 0<= ny < w:
+          if g[nx][ny] == 1:
+            g[nx][ny] = 0
+            q.append((nx,ny))
+
+while True:
+  w, h = map(int, input().split())
+
+  if w== 0 and h ==0:
+    break
+  
+  g = [list(map(int, input().split())) for _ in range(h)]
+  
+  c = 0 
+  for i in range(h):
+    for j in range(w):
+      if g[i][j] == 1:
+        g[i][j] = 0
+        bfs(i,j)
+        c+= 1
+  
+  print(c)
 -----------------------------------------------------------------------------------------------------------
 부분수열의 합
 참고 
