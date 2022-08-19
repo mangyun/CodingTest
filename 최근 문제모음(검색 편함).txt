@@ -3511,3 +3511,37 @@ for i in c: # 동전한개씩 고르는걸 왜 이해 못하냐 명윤아??? 에
         if j >= i: # 작으면 확인할 필요가 없어서 조건
             dp[j] = dp[j] + dp[j - i] # 기존만드는 경우의 수에 + 고른 동전은 무조건 포함할 예정이니까, 동전 뺀거를 만드는 경우의 수
 print(dp[k])
+--------------------------------------------------------------------------------------------------------------
+트리의 부모찾기
+문제에서 'n-1개의 줄에'라고 반복횟수 알려줬는데, 문제를 잘 안읽어서 헛짓거리함
+제발 이런거좀 하지마라,,,,,,,,
+
+import sys
+sys.setrecursionlimit(10000000) # 반복횟수 해제 중요!
+
+input = sys.stdin.readline
+
+n = int(input())
+g = list([]*(n+1) for _ in range(n+1))
+
+visit = [0] *(n+1) 
+
+re = [0] * (n+1)
+
+def dfs(s):
+  if visit[s] == 0:
+    visit[s] = 1
+
+    for i in g[s]:
+      dfs(i)
+      re[i] = s
+
+for i in range(n-1):
+  a, b = map(int, input().split())
+  g[a].append(b)
+  g[b].append(a)
+
+dfs(1)
+
+for i in range(2,n+1):
+  print(re[i])
