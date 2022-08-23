@@ -3622,3 +3622,31 @@ for i in range(1,n):
     dp[i][j] = dp[i-1][j]+dp[i][j-1] # 이전꺼랑, 이전 줄에서 그 위치 더함
     
 print(sum(dp[n-1])%10007) 
+-----------------------------------------------------------------------------------------------------------
+신입사원
+서류 1위는 무조건 채용이고, 서류로는 이미 이겼으니 면접 순위만 보면 되는거임 ㅇㅇ.
+이런 min, max 를 for문 비교 과정에서 바꿀줄 아는 스킬을 길러야함. -> 계산량을 줄이기위해!
+
+import sys
+input = sys.stdin.readline
+
+T = int(input()) #테스트케이스
+
+for i in range(0,T):
+    Cnt = 1 # 정렬된 상태의 서류 1위는 무조건 채용이니깐, 1명은 확보 ㅇㅇ
+    people = []
+    
+    N = int(input())
+    for i in range(N):
+        Paper, Interview = map(int,sys.stdin.readline().split())
+        people.append([Paper, Interview])
+
+    people.sort() # 앞 인덱스인 서류 기준 오름차순. 참고(s1 = sorted(g, key = lambda x : x[0])   ->  x[0]기준으로 정렬됨
+    Max = people[0][1] #서류 1위의 면접순위 -> 서류 기준으로 정렬했으므로, 면접순위만 보면 됨.
+    
+    for i in range(1,N):
+        if Max > people[i][1]: #이미 서류순위로 졌던 이후사람이, 면접순위가 더 높으면 
+            Cnt += 1 # 그 이후사람을 채용.
+            Max = people[i][1] # 그 이후사람의 면접 순위로 교체 -> 어차피 그 사람 이후부터 또 검사하므로, 면접순위만 교체해서 똑같이 이후 비교하면 됨.
+
+    print(Cnt)
