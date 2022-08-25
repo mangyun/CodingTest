@@ -3670,3 +3670,71 @@ cases[2] = 3
 
 for i in range(4, N+1, 2): # 4번째부터는 세로로 나눌수가 없으니까, 곱할때 2씩이다.
     cases[i] = 2 + cases[i-2] * 3 + sum(cases[:i-2]) * 2
+--------------------------------------------------------------------------------------------------------------
+탈출
+    
+import sys
+
+input = sys.stdin.readline
+
+r, c = map(int, input().split())
+
+g = [list(input().rstrip()) for _ in range(r)]
+
+visit = [[0]*c for _ in range(r)]
+
+from collections import deque
+dx, dy = [0,0,-1,1], [1,-1,0,0]
+
+q = deque()
+time = 0
+a, b = 0, 0
+for i in range(r):
+  for j in range(c):
+    if g[i][j] == 'D':
+      s, v = i, j
+      visit[i][j] = 1
+    elif g[i][j] == 'S':
+      q.append((i,j,time))
+      visit[i][j] = 1
+    elif g[i][j] == '*':
+      a, b = i, j
+
+    if i == r-1 and j == c-1 and (a != 0 or b != 0):
+      q.appendleft((a,b,time))
+      visit[a][b] = 1
+
+while q:
+    x, y, t  = q.popleft()
+
+    for i in range(4):
+      nx = x + dx[i]
+      ny = y + dy[i]
+
+      if 0<= nx < r and 0<= ny < c:
+        if g[x][y] == 'S' and g[nx][ny] == 'D':
+          print(t+1)
+          exit()
+          
+        if visit[nx][ny] == 0 and g[nx][ny] != 'X':
+          visit[nx][ny] = 1
+          
+          if g[x][y] == '*':
+            g[nx][ny] = '*'
+            q.append((nx,ny,t+1))
+          elif g[x][y] == 'S':
+            g[nx][ny] = 'S'
+            q.append((nx,ny,t+1))             
+
+flag = 0
+
+for i in range(4):
+  ns = s + dx[i]
+  nv = v + dy[i]
+
+  if 0<= ns < r and 0<= nv < c:
+    if g[ns][nv] == 'S':
+      flag = 1
+
+if flag == 0:
+  print('KAKTUS')
