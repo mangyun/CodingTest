@@ -3672,69 +3672,62 @@ for i in range(4, N+1, 2): # 4번째부터는 세로로 나눌수가 없으니�
     cases[i] = 2 + cases[i-2] * 3 + sum(cases[:i-2]) * 2
 --------------------------------------------------------------------------------------------------------------
 탈출
-    
-import sys
-
-input = sys.stdin.readline
-
-r, c = map(int, input().split())
-
-g = [list(input().rstrip()) for _ in range(r)]
-
-visit = [[0]*c for _ in range(r)]
+토마토 문제처럼 여러 정점에서 출발하는 bfs => 먼저 큐에 다 넣고 시작함!~!!!!!!!!!!!!!!!
+대신 물을 큐에 넣을 때 먼저 다 넣어주거나, appendleft를 사용해서 앞쪽에 배치해야 함!!!
 
 from collections import deque
-dx, dy = [0,0,-1,1], [1,-1,0,0]
+import sys
 
-q = deque()
-time = 0
-a, b = 0, 0
-for i in range(r):
-  for j in range(c):
-    if g[i][j] == 'D':
-      s, v = i, j
-      visit[i][j] = 1
-    elif g[i][j] == 'S':
-      q.append((i,j,time))
-      visit[i][j] = 1
-    elif g[i][j] == '*':
-      a, b = i, j
+def input():
+  return sys.stdin.readline().rstrip()
 
-    if i == r-1 and j == c-1 and (a != 0 or b != 0):
-      q.appendleft((a,b,time))
-      visit[a][b] = 1
+R, C = map(int, input().split())
 
+board = []
+visited = [[False for _ in range(C)] for _ in range(R)]
+
+for _ in range(R):
+  board.append(list(input()))
+  
+cnt = 0
+success = False
+q = deque([])
+dir =[(-1,0),(1,0),(0,1),(0,-1)]
+
+for r in range(R):
+  for c in range(C):
+    if board[r][c] == "*": # 물
+      q.append(("*", 0, r,c))
+      
+for r in range(R):
+  for c in range(C):
+    if board[r][c] == "S": # 고슴도치
+      q.append(("S", 0, r, c))
+      visited[r][c] = True
+      
 while q:
-    x, y, t  = q.popleft()
+  what, cnt, now_r, now_c = q.popleft()
+  for _r, _c in dir:
+    nxt_r, nxt_c = now_r + _r, now_c + _c
+    if not (0<=nxt_r<R) or not (0<=nxt_c<C):
+      continue
+    if what == "*": # 물
+      if board[nxt_r][nxt_c] == ".":
+        board[nxt_r][nxt_c] = "*" # 범람시키기
+        q.append((what, cnt+1, nxt_r, nxt_c))
+    else:
+      if visited[nxt_r][nxt_c]:
+        continue
+      if board[nxt_r][nxt_c] == ".": # 고슴도치
+        q.append((what, cnt+1, nxt_r, nxt_c))
+        visited[nxt_r][nxt_c] = True
+      elif board[nxt_r][nxt_c] == "D": # 굴 도착
+        success = True
+        break
+  if success:
+    break
 
-    for i in range(4):
-      nx = x + dx[i]
-      ny = y + dy[i]
-
-      if 0<= nx < r and 0<= ny < c:
-        if g[x][y] == 'S' and g[nx][ny] == 'D':
-          print(t+1)
-          exit()
-          
-        if visit[nx][ny] == 0 and g[nx][ny] != 'X':
-          visit[nx][ny] = 1
-          
-          if g[x][y] == '*':
-            g[nx][ny] = '*'
-            q.append((nx,ny,t+1))
-          elif g[x][y] == 'S':
-            g[nx][ny] = 'S'
-            q.append((nx,ny,t+1))             
-
-flag = 0
-
-for i in range(4):
-  ns = s + dx[i]
-  nv = v + dy[i]
-
-  if 0<= ns < r and 0<= nv < c:
-    if g[ns][nv] == 'S':
-      flag = 1
-
-if flag == 0:
-  print('KAKTUS')
+if success:
+  print(cnt+1) # 도착전 cnt 의 + 1 
+else:
+  print("KAKTUS")
