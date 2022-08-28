@@ -3738,9 +3738,22 @@ p = [0] + list(map(int,input().split()))
 dp = [0 for _ in range(N+1)]
 ---------------------------------------------------------------------------------------------------------------
 카드 구매하기
-전형적인 dp 
+ex) dp[3] = p[1]+dp[2] or p[2]+dp[1]
+전형적인 dp이고, 입력 p를 dp에 이용하기위해선,
+처음에 한칸 띄어주려고 p.insert(0,0) # 인덱스 0 위치에 0을 추가해줌.
 
-for i in range(1,N+1):
-    for k in range(1,i+1):
-        dp[i] = max(dp[i], dp[i-k] + p[k])
-print(dp[i])
+import sys
+
+input = sys.stdin.readline
+
+n = int(input())
+p = list(map(int, input().split()))
+p.insert(0,0) # 인덱스 0 위치에 0을 추가해줌.
+
+dp = [0 for _ in range(n+1)]
+
+for i in range(1, n+1):
+    for j in range(1,i+1):
+        dp[i] = max(dp[i], p[j] + dp[i-j])
+      
+print(dp[n])
