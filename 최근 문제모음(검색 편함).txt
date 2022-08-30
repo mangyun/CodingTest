@@ -3785,3 +3785,54 @@ for num in range(1000001):
       min_count = min(min_count, len(num) + abs(int(num) - n)) # 최소값과, 현재 수 치는 횟수 + 수정하는 횟수와 비교 갱신.
 
 print(min_count)
+--------------------------------------------------------------------------------------------------------------
+연산자 끼워넣기
+걍 완탐에다가, 백트래킹일거 같았다. visit으로 true하고 방문처리하고 보내고, 다시 false로 만드는 백트래킹으로 할수도있엇지만,
+그냥 매개변수 자체만 계속 만져서 코딩함.
+아 그리고 최저, 최대값 초기화할때 완전 작고, 크게 만들자!!! 
+첨에 max = 0으로만 했다가, 처음에 바로 음수일때 갱신이 안되서 틀렸다!! 그래서 -1000000으로,, ㅎ,,
+이런 바로 틀리는 예외들은 항상 처음이나 끝에 존재하니까, 코테할때도 이런거 검사 잘하자 알겟냐??
+
+참고
+1. 음수 / 양수의 몫 = int(음수 / 양수) = 소수점 컷! = -7 / 2 = -3
+2. (음수 // 양수) = -7 // 2 = -4
+
+import sys
+
+input = sys.stdin.readline
+
+n = int(input())
+num = list(map(int, input().split()))
+p, m, mu, d = map(int, input().split())
+
+max_s = -10000000000000 # 최저값할때도, 아예 완전 작게 해버리자!!
+min_s = 1000000000 # 최대값도 완전크게!!
+
+def dfs(k, i, pl, mi, mul, di):
+  global max_s, min_s
+
+  if i == n-1:
+    max_s = max(max_s, k)
+    min_s = min(min_s, k)
+    return 
+
+  #매번 변수자체에다가 값 수정
+  if pl > 0:
+    dfs(k+num[i+1], i+1, pl-1, mi, mul, di)
+
+  if mi > 0:
+    dfs(k-num[i+1], i+1, pl, mi-1, mul, di)
+
+  if mul > 0:
+    dfs(k*num[i+1], i+1, pl, mi, mul-1, di)
+
+  if di > 0:
+    if k >= 0:
+      dfs(k//num[i+1], i+1, pl, mi, mul, di-1)
+    else:
+      dfs(int(k/num[i+1]), i+1, pl, mi, mul, di-1)
+   
+dfs(num[0], 0, p,m,mu,d)
+
+print(max_s)
+print(min_s)
