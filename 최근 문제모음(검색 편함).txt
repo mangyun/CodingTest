@@ -3919,3 +3919,118 @@ for t in range(k):
   re = max(re, c)
   
 print(re)
+--------------------------------------------------------------------------------------------------------------
+안전영역
+dfs 오랜만에 하니까 이걸 까먹네;;
+k = max(map(max,g)) #최대 높이만 보면 되니깐! 기억!
+  
+  import sys
+sys.setrecursionlimit(10 ** 5)
+
+input = sys.stdin.readline
+
+n = int(input())
+g = [list(map(int, input().split())) for _ in range(n)]
+
+k = max(map(max,g)) #최대 높이만 보면 되니깐!
+
+def dfs(x, y):
+  if 0<= x < n and 0<= y<n: # 이걸 까먹었네;; 분발하자;
+    if visit[x][y] == 0 and g[x][y] > t: # 최대높이 보다 큰건 방문
+      visit[x][y] = 1 
+      dfs(x+1, y)
+      dfs(x, y+1)
+      dfs(x-1, y)
+      dfs(x, y-1)
+
+re = 0
+
+for t in range(k):
+  c = 0
+  
+  visit = [[0]*n for _ in range(n)] # 매 횟수마다, 다시 첨 부터 방문
+  for i in range(n):
+    for j in range(n):
+        if visit[i][j] == 0 and g[i][j] > t:
+          dfs(i,j)
+          c+=1
+      
+  re = max(re, c)
+  
+print(re)
+--------------------------------------------------------------------------------------------------------------
+안전영역
+dfs 오랜만에 하니까 이걸 까먹네;;
+k = max(map(max,g)) #최대 높이만 보면 되니깐! 기억!
+  
+  import sys
+sys.setrecursionlimit(10 ** 5)
+
+input = sys.stdin.readline
+
+n = int(input())
+g = [list(map(int, input().split())) for _ in range(n)]
+
+k = max(map(max,g)) #최대 높이만 보면 되니깐!
+
+def dfs(x, y):
+  if 0<= x < n and 0<= y<n: # 이걸 까먹었네;; 분발하자;
+    if visit[x][y] == 0 and g[x][y] > t: # 최대높이 보다 큰건 방문
+      visit[x][y] = 1 
+      dfs(x+1, y)
+      dfs(x, y+1)
+      dfs(x-1, y)
+      dfs(x, y-1)
+
+re = 0
+
+for t in range(k):
+  c = 0
+  
+  visit = [[0]*n for _ in range(n)] # 매 횟수마다, 다시 첨 부터 방문
+  for i in range(n):
+    for j in range(n):
+        if visit[i][j] == 0 and g[i][j] > t:
+          dfs(i,j)
+          c+=1
+      
+  re = max(re, c)
+  
+print(re)
+--------------------------------------------------------------------------------------------------------------
+괄호 추가하기
+
+  import sys
+sys.setrecursionlimit(10 ** 5)
+
+input = sys.stdin.readline
+
+n = int(input())
+g = [list(map(int, input().split())) for _ in range(n)]
+
+k = max(map(max,g)) #최대 높이만 보면 되니깐!
+
+def dfs(x, y):
+  if 0<= x < n and 0<= y<n: # 이걸 까먹었네;; 분발하자;
+    if visit[x][y] == 0 and g[x][y] > t: # 최대높이 보다 큰건 방문
+      visit[x][y] = 1 
+      dfs(x+1, y)
+      dfs(x, y+1)
+      dfs(x-1, y)
+      dfs(x, y-1)
+
+re = 0
+
+for t in range(k):
+  c = 0
+  
+  visit = [[0]*n for _ in range(n)] # 매 횟수마다, 다시 첨 부터 방문
+  for i in range(n):
+    for j in range(n):
+        if visit[i][j] == 0 and g[i][j] > t:
+          dfs(i,j)
+          c+=1
+      
+  re = max(re, c)
+  
+print(re)
