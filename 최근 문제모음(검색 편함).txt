@@ -3999,38 +3999,58 @@ for t in range(k):
 print(re)
 --------------------------------------------------------------------------------------------------------------
 괄호 추가하기
+전형적인 백트래킹이라 생각함.
+def calculate(a, op, b):
+    return str(eval(a+op+b)) // str(eval(값+연산자+값)) 아주 스무스한 계산법이다!
 
-  import sys
-sys.setrecursionlimit(10 ** 5)
-
+import copy
+import sys
 input = sys.stdin.readline
+MAX = sys.maxsize
 
-n = int(input())
-g = [list(map(int, input().split())) for _ in range(n)]
+N = int(input())
+arr = input().strip()
+nums = []
+op = []
+for i, x in enumerate(arr):
+    if i % 2 == 0:
+        nums.append(x)
+    else:
+        op.append(x)
 
-k = max(map(max,g)) #최대 높이만 보면 되니깐!
+def calculate(a, op, b):
+    return str(eval(a+op+b))
 
-def dfs(x, y):
-  if 0<= x < n and 0<= y<n: # 이걸 까먹었네;; 분발하자;
-    if visit[x][y] == 0 and g[x][y] > t: # 최대높이 보다 큰건 방문
-      visit[x][y] = 1 
-      dfs(x+1, y)
-      dfs(x, y+1)
-      dfs(x-1, y)
-      dfs(x, y-1)
 
-re = 0
+def calculate_front(arr):
+    result = arr[0]
+    for i in range(1, len(arr)-1, 2):
+        result = calculate(result, arr[i], arr[i+1])
+    return result
 
-for t in range(k):
-  c = 0
-  
-  visit = [[0]*n for _ in range(n)] # 매 횟수마다, 다시 첨 부터 방문
-  for i in range(n):
-    for j in range(n):
-        if visit[i][j] == 0 and g[i][j] > t:
-          dfs(i,j)
-          c+=1
-      
-  re = max(re, c)
-  
-print(re)
+
+def dfs(index, arr, is_used):
+    global answer
+    if index == len(op):
+        answer = max(answer, int(calculate_front(arr)))
+        return
+    if is_used:
+        temp = copy.deepcopy(arr)
+        temp.append(op[index])
+        temp.append(nums[index+1])
+        dfs(index+1, temp, False)
+    else:
+        temp = copy.deepcopy(arr)
+        temp.append(op[index])
+        temp.append(nums[index+1])
+        dfs(index+1, temp, False)
+        temp.pop()
+        temp.pop()
+        temp.pop()
+        temp.append(calculate(nums[index], op[index], nums[index+1]))
+        dfs(index+1, temp, True)
+
+
+answer = -MAX
+dfs(0, [nums[0]], False)
+print(answer)
