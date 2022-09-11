@@ -4085,3 +4085,55 @@ for i in range(N - 1, -1, -1): # 제일 중요한 역방향으로~~~~~~~~~~~~~~~
         d[i] = max(d[i+1], P[i] + d[i + T[i]])
 
 print(d[0]) 
+--------------------------------------------------------------------------------------------------------------
+주사위 굴리기
+그냥 구현이라고는 생각했지만, 정육면체에서 각 상황일때 원소 박는거에 진짜 감동먹음,,, ㄹㅇ,,,
+for i in kli:
+  x = x +dx[i-1]
+  y = y +dy[i-1] 
+또 이거처럼 방향 그대로 지정?하는것을 몸으로 체화한 느낌,,, 후,,
+
+import sys
+sys.setrecursionlimit(10 ** 5)
+
+input = sys.stdin.readline
+
+n, m, x, y, k = map(int, input().split())
+g = [list(map(int, input().split())) for _ in range(n)]
+kli = list(map(int, input().split()))
+dice = [0] * 6
+
+def turn(dir):  # 이게 진짜 ㄹㅇ이었다,,,
+    a, b, c, d, e, f = dice[0], dice[1], dice[2], dice[3], dice[4], dice[5]
+    if dir == 1: #동
+        dice[0], dice[1], dice[2], dice[3], dice[4], dice[5] = d, b, a, f, e, c
+
+    elif dir == 2: #서
+        dice[0], dice[1], dice[2], dice[3], dice[4], dice[5] = c, b, f, a, e, d
+
+    elif dir == 3: #북
+        dice[0], dice[1], dice[2], dice[3], dice[4], dice[5] = e, a, c, d, f, b
+
+    else:
+        dice[0], dice[1], dice[2], dice[3], dice[4], dice[5] = b, f, c, d, a, e
+
+dx, dy = [0,0,-1,1], [1,-1,0,0]
+
+for i in kli: # 원소 그대로 방향 하는 느낌쓰~
+  x = x +dx[i-1]
+  y = y +dy[i-1]
+
+  if 0<=x<n and 0<=y<m:
+    turn(i)
+
+    if g[x][y] == 0:
+        g[x][y] = dice[-1]
+    else:
+        dice[-1] = g[x][y]
+        g[x][y] = 0
+
+    print(dice[0])
+    
+  else:
+    x = x - dx[i-1]
+    y = y - dy[i-1] 
