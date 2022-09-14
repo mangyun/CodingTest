@@ -4137,3 +4137,83 @@ for i in kli: # 원소 그대로 방향 하는 느낌쓰~
   else:
     x = x - dx[i-1]
     y = y - dy[i-1] 
+    
+--------------------------------------------------------------------------------------------------------------
+구슬 탈출 2
+다시 해보자
+
+import sys
+sys.setrecursionlimit(10 ** 5)
+
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+g = [list(input().rstrip()) for _ in range(n)]
+def move(x, y, dx, dy):
+    count = 0
+    while g[x+dx][y+dy] != '#' and g[x][y] != 'O':
+        x += dx
+        y += dy
+        count += 1
+    return x, y, count 
+
+for i in range(1,n-1):
+  for j in range(1,m-1):
+    if g[i][j] == 'O':
+      ox, oy = i, j
+    elif g[i][j] == 'R':
+      rx, ry = i, j
+    elif g[i][j] == 'B':
+      bx, by = i, j
+
+from collections import deque
+dx, dy = [0,0,-1,1],[1,-1,0,0]
+t= 0
+def bfs(ix,iy):
+  q= deque()
+  q.append((ix,iy))
+  visit[ix][iy] = 1
+  global t
+  while q:
+    x, y = q.popleft()
+
+    for i in range(4):
+      nx = x+dx[i]
+      ny = y+dy[i]
+      
+      if g[nx][ny] == '.' and visit[nx][ny] == 0:
+        visit[nx][ny] = 1
+        move(x,y,)
+        q.append((nx,ny))
+  
+ 
+
+if ox == rx == bx:
+  if (ry < oy < by) or (ry < oy  < by):
+    print(1)
+  else:
+    print(-1)
+elif oy == ry == by:
+  if (rx < ox < bx) or (rx < ox  < bx):
+    print(1)
+  else:
+    print(-1)
+else:
+  # 레드일때 블루일때 두번 수행 = 딥 카피
+  # 둘이 각각 최소를 구해서 r이 작고 10보다 작으면 답
+  # 아니면
+    visit = [[0]*m for _ in range(n)] 
+    bfs(rx,ry)
+
+    visit = [[0]*m for _ in range(n)] 
+    bfs(bx,by)
+
+
+  
+  
+  
+print(g)
+    
+  
+  
+
