@@ -4140,80 +4140,65 @@ for i in kli: # 원소 그대로 방향 하는 느낌쓰~
     
 --------------------------------------------------------------------------------------------------------------
 구슬 탈출 2
-다시 해보자
+만약 기울린 후 파란 구슬의 위치가 구멍이 아니고, 파란 구슬과 빨간 구슬의 위치가 같으면 move 함수를 통해 
+리턴받은 한 방향으로 움직인 횟수를 비교해서 만약 빨간 구슬이 더 움직였다면 파란 구슬 뒤로 이동하고,
+ 파란 구슬이 더 움직였다면 빨간 구슬 뒤로 이동시켜줌.
 
-import sys
-sys.setrecursionlimit(10 ** 5)
-
-input = sys.stdin.readline
+# BFS + 구현
+from collections import deque
 
 n, m = map(int, input().split())
-g = [list(input().rstrip()) for _ in range(n)]
+graph = []
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+rx, ry, bx, by = 0, 0, 0, 0
+# 빨간구슬과 파란구슬의 기울여서 이동한 위치를 visited 4차원 리스트를 통해 방문처리
+visited = [[[[False] * m for _ in range(n)] for _ in range(m)] for _ in range(n)]
+
+# 빨간, 파란 좌표처리
+for i in range(n):
+    data = list(input())
+    graph.append(data)
+    for d in range(len(data)):
+        if data[d] == 'R':
+            rx, ry = i, d
+        elif data[d] == 'B':
+            bx, by = i, d 
+
+# 끝이 도착했으면 이동횟수 증가
 def move(x, y, dx, dy):
     count = 0
-    while g[x+dx][y+dy] != '#' and g[x][y] != 'O':
+    while graph[x+dx][y+dy] != '#' and graph[x][y] != 'O': 
         x += dx
         y += dy
         count += 1
-    return x, y, count 
+    return x, y, count
 
-for i in range(1,n-1):
-  for j in range(1,m-1):
-    if g[i][j] == 'O':
-      ox, oy = i, j
-    elif g[i][j] == 'R':
-      rx, ry = i, j
-    elif g[i][j] == 'B':
-      bx, by = i, j
-
-from collections import deque
-dx, dy = [0,0,-1,1],[1,-1,0,0]
-t= 0
-def bfs(ix,iy):
-  q= deque()
-  q.append((ix,iy))
-  visit[ix][iy] = 1
-  global t
-  while q:
-    x, y = q.popleft()
-
-    for i in range(4):
-      nx = x+dx[i]
-      ny = y+dy[i]
-      
-      if g[nx][ny] == '.' and visit[nx][ny] == 0:
-        visit[nx][ny] = 1
-        move(x,y,)
-        q.append((nx,ny))
-  
- 
-
-if ox == rx == bx:
-  if (ry < oy < by) or (ry < oy  < by):
-    print(1)
-  else:
-    print(-1)
-elif oy == ry == by:
-  if (rx < ox < bx) or (rx < ox  < bx):
-    print(1)
-  else:
-    print(-1)
-else:
-  # 레드일때 블루일때 두번 수행 = 딥 카피
-  # 둘이 각각 최소를 구해서 r이 작고 10보다 작으면 답
-  # 아니면
-    visit = [[0]*m for _ in range(n)] 
-    bfs(rx,ry)
-
-    visit = [[0]*m for _ in range(n)] 
-    bfs(bx,by)
+def bfs(rx, ry, bx, by):
+    q = deque()
+    q.append((rx, ry, bx, by, 1))
+    visited[rx][ry][bx][by] = True
+    while q:
+        r_x, r_y, b_x, b_y, depth = q.popleft()
+        if depth > 10:
+            break
+        for i in range(4):
+            r_nx, r_ny, r_cnt = move(r_x, r_y, dx[i], dy[i])
+            b_nx, b_ny, b_cnt = move(b_x, b_y, dx[i], dy[i])
+            if graph[b_nx][b_ny] != 'O':
+                if graph[r_nx][r_ny] == 'O':
+                    return depth
+                if r_nx == b_nx and r_ny == b_ny:
+                    if r_cnt > b_cnt:
+                        r_nx -= dx[i]
+                        r_ny -= dy[i]
+                    else:
+                        b_nx -= dx[i]
+                        b_ny -= dy[i]
+                if not visited[r_nx][r_ny][b_nx][b_ny]:
+                    visited[r_nx][r_ny][b_nx][b_ny] = True
+                    q.append((r_nx, r_ny, b_nx, b_ny, depth+1))
+    return -1
 
 
-  
-  
-  
-print(g)
-    
-  
-  
-
+print(bfs(rx, ry, bx, by))
