@@ -4304,4 +4304,31 @@ def simulate():
 
 print(simulate())
 --------------------------------------------------------------------------------------------------------------
-시험감독
+시험 감독
+사람들이 많이 안풀엇나..? 왜 쉬운거 같은데 정답률이 낮지..?
+그냥 생각대로 구현한거고, 예외처리가 범위가 벗어날때랑, 초반과 마지막 잘 해줘야함.
+다른사람 풀이한번 봐보자. 뭐 다른게 있나. -> 그냥 구현 문제였음 ㅇㅇ
+
+import sys
+
+input = sys.stdin.readline
+
+n = int(input())
+g = list(map(int, input().split()))
+b, c = list(map(int, input().split()))
+count = 0
+result = []
+for i in range(n):
+  g[i]-= b
+  count+=1
+
+  if g[i] > 0:
+    if g[i] % c > 0:
+      count = count + g[i] // c + 1
+    elif g[i] % c == 0:
+      if g[i] // c > 0:
+        count = count + g[i] // c
+      else:
+        count = count + 1
+   
+print(count)
