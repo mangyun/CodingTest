@@ -4421,3 +4421,38 @@ def bfs(s):
       if visit[i] == 0:
         visit[i] = 1
         q.append(i)
+--------------------------------------------------------------------------------------------------------------
+숨바꼭질
+and로 조건 주면 순차적으로 확인.!!!!!!!!!!!!! ~~~~~~~~~~~> &&이거나 and나 앞에꺼 먼저 비교한다!! 이거때매 인덱스 에러남;;
+오랜만에 풀었는데, 기본적인 범위설정때매 인덱스 에러남;; 역시 범위의 처음과 마지막으로 엣지 케이스만들자!!
+
+import sys
+
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+visit = [0] * 100001 # 좌표위 다 거칠것 같아서, 애초에 좌표 모든지점 선언해주는 것, 이런 스킬 많이사용~~~~~~
+
+from collections import deque
+
+def bfs(nw,tw):
+  q = deque()
+  q.append((nw,tw))
+  visit[nw] = 1
+
+  while q:
+    w, time = q.popleft()
+
+    if w == k:
+      print(time)
+      break
+
+    for i in (w-1,w+1,w*2):
+      # if i >100000 or i < 0:
+      #   continue
+      # 위처럼 범위설정을 따로 처리하던가, 먼저 선언해주던가 하자!!! 아니면 visit[-1], visit[200000]이렇게 인덱스 에러난다!!!
+      if 0<=i<=100000 and visit[i] == 0: # and로 조건 주면 순차적으로 확인.!!!!!!!!!!!!! 범위설정 개중요~~~~~~~~~~~~
+        visit[i] = 1
+        q.append((i,time+1))
+    
+bfs(n, 0)
