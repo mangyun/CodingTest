@@ -4525,3 +4525,44 @@ if n >= 100:
   print(c)
 else:
   print(n)
+--------------------------------------------------------------------------------------------------------------
+통계학
+count()이거로 하니까 시간초과 오지게 떴다;; -> 그래서 Counter 라이브러리 사용해야함~~~~~~~~~~~~~~
+
+참고) 개수를 체크할 때 from collections import Counter 이용, colors.most_common(2) = 가장 많은거 부터 2개 출력 
+from collections import Counter
+colors = Counter(['blue', 'green', 'red', 'blue','red','blue'])
+print(colors)
+# Counter({'blue': 3, 'red': 2, 'green': 1})
+print(colors.most_common())
+# [('red', 3), ('blue', 2), ('green', 1)]
+print(colors.most_common(2))
+# 가장 많은 것 부터 2개 출력
+# [('red', 3), ('blue', 2)]
+
+Counter를 사용해서 푼 풀이
+
+import sys
+from collections import Counter # Counter 라이브러리 이용~~~~~~~~~~~~~~
+
+n = int(sys.stdin.readline()) # 입력을 받을때 input()말고 sys함수를 이용하여 받아야 시간초과 안뜸
+li = []
+for _ in range(n):
+    li.append(int(sys.stdin.readline()))
+ 
+# 산술평균 - 다 더해서 / n
+print(round(sum(li)/n)) # 음수든 양수든 반올림은 round 처리~~~~~~~~~~~~~~~~~~~~
+ 
+# 중앙값 - 오름차순 -> 중간값
+li.sort()
+print(li[n//2])
+ 
+# 최빈값 - 빈출~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~제일 어려운 빈도 구하기!!!
+cnt_li = Counter(li).most_common() # most_common()이용~~~~~~~~~~
+if len(cnt_li) > 1 and cnt_li[0][1]==cnt_li[1][1]: #최빈값 2개 이상
+    print(cnt_li[1][0])
+else:
+    print(cnt_li[0][0])
+ 
+# 범위 - 최댓값-최솟값
+print(max(li)-min(li))
