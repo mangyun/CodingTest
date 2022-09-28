@@ -4456,3 +4456,27 @@ def bfs(nw,tw):
         q.append((i,time+1))
     
 bfs(n, 0)
+--------------------------------------------------------------------------------------------------------------
+셀프넘버
+숫자 각 자릿수 = for j in str(n)
+set - 차집합가능, 순서섞임, 자료형 중복제거 필터로 사용.
+set은 추가할때 add,  list는 append
+set내림차순은 sorted(셋, reverse=True)
+
+import sys
+
+input = sys.stdin.readline
+
+a = set(range(1, 10001)) # 이런식으로 범위 수 추가가능~~~~~~~~~~~~
+b = set()
+
+for i in range(1, 10001):
+  s = i
+  for j in str(i): # 숫자 각 자릿수만 떼기~~~~~~~~~~~~~~~~
+    s += int(j)
+
+  if s <= 10000:
+    b.add(s) # set은 add로 추가~~~~~~~~~~~~~~~~~
+
+for i in sorted(a-b): # set은 sorted만 됨~~~~~~~~~~~~~~~~~
+  print(i)
