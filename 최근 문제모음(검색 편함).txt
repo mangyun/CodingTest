@@ -4643,3 +4643,41 @@ def bfs(x, y, z):
     return -1
 
 print(bfs(0, 0, 0))
+--------------------------------------------------------------------------------------------------------------
+알파벳
+bfs로 하다가 각 모든경우를 다봐야 할거 같아서, 백트래킹으로 전환함.
+bfs로는 풀리지도 않을뿐더러, 내가 푼 방법외에, set().add, remove으로 풀 수 있었다.
+
+1. 내 풀이
+import sys
+sys.setrecursionlimit(10000)
+
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+
+g = [list(input()) for _ in range(n)]
+
+dx, dy = [0, 0, -1, 1], [-1, 1, 0, 0]
+
+visit = [0] * 32 # alpha = set()
+visit[ord(g[0][0]) - 65] = 1 # alpha.add(g[0][0])
+
+re = 0
+
+def dfs(x, y, c):
+  global re
+  re = max(re, c)
+  for i in range(4):
+    nx = x + dx[i]
+    ny = y + dy[i]
+
+    if 0<= nx < n and 0<= ny < m:
+      if visit[ord(g[nx][ny]) - 65] == 0: # if g[nx][ny] not in alpha:
+        visit[ord(g[nx][ny]) - 65] = 1 # alpha.add(g[nx][ny])
+        dfs(nx,ny,c+1)
+        visit[ord(g[nx][ny]) - 65] = 0 # alpha.remove(g[nx][ny])
+    
+dfs(0,0,1)
+
+print(re)
