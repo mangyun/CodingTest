@@ -4743,3 +4743,48 @@ for nums in range(1000001): # 50만개라 완탐가능, 무한대 힌트 = 양�
             min_count = min(min_count, abs(int(nums) - target) + len(nums))
 
 print(min_count)
+--------------------------------------------------------------------------------------------------------------
+이분 그래프
+1. 이분 그래프는 서로 인접한 노드끼리 색깔이 다른 표시를 -1 *visit형식으로 해줌!!
+2. 또 아예 안 이어진 그래프도 존재할 수 있으니, 애초에 모든 점을 다 탐색해봐야 함.!!!
+visited[w] = -1 * visited[v] # 이렇게 양수, 음수로 현재 노드와 다른 그룹 지정!!
+
+import sys
+
+from collections import deque
+
+input = sys.stdin.readline
+
+t = int(input())
+
+for i in range(t):
+  
+  v, e = map(int, input().split())
+  visit = [0]*(v+1)
+  g = [[] for _ in range(v+1)]
+
+  for i in range(e):
+    s, d = map(int, input().split())
+    g[s].append(d)
+    g[d].append(s)
+
+  q = deque()
+  flag = True # 일단 성공으로 플래그!
+
+  for i in range(1, v+1):
+    if visit[i] == 0:
+      q.append(i)
+      visit[i] = 1
+
+      while q:
+        x = q.popleft()
+        
+        for j in g[x]:
+          if visit[j] ==0:
+            visit[j] = -1 * visit[x] # 인접한건 -1 곱해서 서로 다른 그룹으로 지정.
+            q.append(j)
+~~~~~~~~~~~~~~~~~~~~~~~~~~제일 중요~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          elif visit[j] == visit[x]: # 이미 이전 부모원소 때 방문은 했는데, 심지어 현재 같아버리면 이분 안되는거임 ㅇㅇ 
+            flag = False # 그래서 실패
+
+  print('YES' if flag else 'NO')
