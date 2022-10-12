@@ -4681,3 +4681,65 @@ def dfs(x, y, c):
 dfs(0,0,1)
 
 print(re)
+--------------------------------------------------------------------------------------------------------------
+연결 요소의 개수
+그냥 전형적인 bfs, dfs 문제인듯
+
+import sys
+sys.setrecursionlimit(10000)
+
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+
+g = [[] for _ in range(n+1)]
+
+for i in range(m):
+  a, b= map(int, input().split())
+  g[a].append(b)
+  g[b].append(a)
+  
+visit = [0] * (n+1)
+
+def dfs(s):
+  visit[s] = 1
+
+  for i in g[s]:
+    if visit[i] == 0:
+      dfs(i)
+
+c = 0
+
+for i in range(1, n+1):
+  if visit[i] == 0:
+    dfs(i)
+    c += 1
+
+print(c)
+--------------------------------------------------------------------------------------------------------------
+리모컨
+역시 50만정도여도 무조건 스킬이아니라, 은근히 완탐문제가 많다는걸 다시 느낌.
+문제가 어려울수록 코드가 짧다 -> 그만큼 아이디어를 뽑아내야함.
+여기서는 낮고 높은 경우로 총 2개를 따져야하니, 모든 전범위는 50만*2인 100만이 됨!!!!!
+그 100만의 범위의 모든 수를 전부 다 따져보면 됨!
+
+import sys
+input = sys.stdin.readline
+
+target = int(input())
+n = int(input())
+broken = list(map(int, input().split()))
+
+min_count = abs(100 - target) # 현재 채널에서 + 혹은 -만 사용하여 이동하는 경우
+
+for nums in range(1000001): # 50만개라 완탐가능, 무한대 힌트 = 양쪽 접근 2배!!!
+    nums = str(nums)
+    
+    for j in range(len(nums)):
+        
+        if int(nums[j]) in broken: # 각 숫자가 고장났는지 확인 후, 고장 났으면 break
+            break
+        elif j == len(nums) - 1: # 고장난 숫자 없이 마지막 자리까지 왔다면 min_count 비교 후 업데이트
+            min_count = min(min_count, abs(int(nums) - target) + len(nums))
+
+print(min_count)
