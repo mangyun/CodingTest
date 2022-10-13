@@ -4788,3 +4788,69 @@ for i in range(t):
             flag = False # 그래서 실패
 
   print('YES' if flag else 'NO')
+--------------------------------------------------------------------------------------------------------------
+스타트와 링크
+조건보니 완탐이었고, 더 빠르게 해결할 수 있는 백트래킹이었음.
+
+1. 조합으로 푸는법
+순서쌍 구별하는 방법 2가지
+1. 조합순서상 예를 들어 처음 1,2번을 뽑으면 무조건 마지막은 3,4번을 뽑은 여집합임, 즉 t[i], t[-i-1]임
+2. n명의 인원 중에서 n//2의 인원을 뽑고 나머지 인원은 set으로 차집합시켜서 빼줌.
+
+import sys
+input = sys.stdin.readline
+
+from itertools import combinations
+
+n = int(input())
+array = [i for i in range(n)]
+matrix = [list(map(int, input().split())) for _ in range(n)]
+
+result = int(1e9)
+
+for r1 in combinations(array, n//2):
+    start, link = 0, 0
+    r2 = list(set(array) - set(r1))
+    for r in combinations(r1, 2):
+        start += matrix[r[0]][r[1]]
+        start += matrix[r[1]][r[0]]
+    for r in combinations(r2, 2):
+        link += matrix[r[0]][r[1]]
+        link += matrix[r[1]][r[0]]
+    result = min(result, abs(start-link))
+  
+print(result)
+
+
+2. 백트래킹으로 푸는법
+백트래킹을 풀때는 주의점 2개
+- 재귀함수 중단 조건 백트래킹을 마무리할때 어떻게 할건지
+- 위에 중단 조건으로 마무리 되고나고 다른 방식을 찾을 때 방문을 취소하는 법
+이거 두개만 지키면 해결 가능하다.
+def dfs(depth, idx):
+    global min_diff
+    if depth == n//2:
+        power1, power2 = 0, 0
+        for i in range(n):
+            for j in range(n):
+                if visited[i] and visited[j]:
+                    power1 += graph[i][j]
+                elif not visited[i] and not visited[j]:
+                    power2 += graph[i][j]
+        min_diff = min(min_diff, abs(power1-power2))
+        return
+
+    for i in range(idx, n):
+        if not visited[i]:
+            visited[i] = True # 일단 팀에 추가하고
+            dfs(depth+1, i+1) # 턴 보내버리고
+            visited[i] = False # 다시 그 사람은 팀에서 추방
+
+n = int(input())
+
+visited = [False for _ in range(n)]
+graph = [list(map(int, input().split())) for _ in range(n)]
+min_diff = int(1e9)
+
+dfs(0, 0)
+print(min_diff)
